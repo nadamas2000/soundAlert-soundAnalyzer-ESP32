@@ -50,6 +50,10 @@
 
 ![3D Printed Case](https://cdn.thingiverse.com/assets/06/06/ce/4a/9f/featured_preview_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg)
 
-
-
 [Video with sound analysis tool working in case](https://www.youtube.com/watch?v=QHgimJAhCMs)
+
+-------------------------------------
+
+AAA Rechargable Battery connections for 3.7V or 1.2V.
+
+![AAA Battery connections](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
