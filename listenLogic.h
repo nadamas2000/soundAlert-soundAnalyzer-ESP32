@@ -15,16 +15,8 @@
 
 // -------------- Listening global variables and constants ------------------
 const int LISTEN_SAMPLES = 1024;
-const int LISTEN_MAX_FREQ = 16; // kHz
-const unsigned long sampling_period_us_LISTEN = round(1000ul * (1.0 / LISTEN_MAX_FREQ)); // 1/Hz = T(s) -> 1/kHz = T(ms)
-const int log2Sample_LISTEN = log(LISTEN_SAMPLES) / log(2);
-
-bool alert = false;
-long chrono_LISTEN;
-float _Complex data_LISTEN[LISTEN_SAMPLES];
 float max_LISTEN = 0;
 int maxI_LISTEN = 0;
-
 
 
 // ----------------- Main listening mode -----------------
@@ -51,6 +43,7 @@ void drawAlertImages(AlertElement &a);
 
 /**
 * @brief Displays the alert information on the display.
+* @param debug Debug mode to show technical information.
 */
 void printAlert(bool debug);
 
@@ -63,25 +56,28 @@ void showListeningInfo();
 // ---------------- Sound analyze ----------------------
 /**
 * @brief Reads the sound data from the microphone.
+* @param data The array to store the sound data.
 */
-void getSound();
+void getSound(float _Complex *data);
 
 /**
 * @brief Analyzes the sound data using Fast Fourier Transform (FFT).
+* @param data The sound data to analyze.
 */
-void analyzeSound();
+void analyzeSound(float _Complex *data);
 
 /**
 * @brief Extracts the relevant information from the analyzed sound data.
+* @param data The analyzed sound data.
 */
-void getRellevantInfo();
+void getRellevantInfo(float _Complex *data);
 
 
 // --------------- Check alerts ------------------------
 /**
 * @brief Checks if there is a match between the analyzed sound data and the defined alerts.
 */
-void alertMatching(unsigned long &lastActivity, int &awakeDuration);
+void alertMatching();
 
 
 
@@ -141,7 +137,7 @@ void printAlert(bool debug) {
 void showListeningInfo() {
   display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
   display.setCursor(0, 0);
-  display.println("Hz: " + String(maxI_LISTEN));  
+  display.println("Mark: " + String(maxI_LISTEN));
   display.setCursor(0, FONT_HEIGHT);
   display.println("AHz: " + String(max_LISTEN));
   display.setCursor(0, FONT_HEIGHT * 2);
@@ -151,26 +147,32 @@ void showListeningInfo() {
 
 
 // ---------------- Sound analyze ----------------------
-void getSound() {
+void getSound(float _Complex *data) {
+  static long chrono;
+  static const int LISTEN_MAX_FREQ = 16; // kHz
+  static const unsigned long sampling_period_us = round(1000ul * (1.0 / LISTEN_MAX_FREQ)); // 1/Hz = T(s) -> 1/kHz = T(ms)
+  
   for (int i = 0; i < LISTEN_SAMPLES; i++) {
-    chrono_LISTEN = micros();
-    data_LISTEN[i] = analogRead(MIC_PIN);    
-    while (micros() - chrono_LISTEN < sampling_period_us_LISTEN); // only if analogRead time < sampling_period_us
+    chrono = micros();
+    data[i] = analogRead(MIC_PIN);    
+    while (micros() - chrono < sampling_period_us); // only if analogRead time < sampling_period_us
   }
 }
 
-void analyzeSound() {
-  getSound();   
-  applyWindow (data_LISTEN, log2Sample_LISTEN, HAMMING, FFT_FORWARD);
-  performFFT(data_LISTEN, log2Sample_LISTEN, FFT_FORWARD);
+void analyzeSound(float _Complex *data) {
+  static const int log2Sample = log(LISTEN_SAMPLES) / log(2);
+  
+  getSound(data);   
+  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
+  performFFT(data, log2Sample, FFT_FORWARD);
 }
 
-void getRellevantInfo() {
+void getRellevantInfo(float _Complex *data) {
   max_LISTEN = 0;
   maxI_LISTEN = 0;
   for (int i = 1; i < LISTEN_SAMPLES; i++) {
-    if (creal(data_LISTEN[i]) > max_LISTEN) {
-      max_LISTEN = creal(data_LISTEN[i]);
+    if (creal(data[i]) > max_LISTEN) {
+      max_LISTEN = creal(data[i]);
       maxI_LISTEN = i;    
     }
   }
@@ -178,35 +180,42 @@ void getRellevantInfo() {
 
 
 // --------------- Check alerts ------------------------
-void alertMatching(unsigned long &lastActivity, int &awakeDuration) {
+bool alertMatching() {
   bool alertMatch = false;
   for (int i = 0; i < N_ALERT_TYPES; i++) {
     if (maxI_LISTEN == alerts[i].iteratorMark and max_LISTEN > alerts[i].minIntensity){
       alertMatch = true;
       alerts[i].alertStatus = true; 
       alerts[i].intensityMark = max_LISTEN;
-      for (int j = 0; j < N_ALERT_TYPES; j++) {
+      for (int j = 0; j < N_ALERT_TYPES; j++) { // Clear other alert match
         if (j != i) alerts[j].alertStatus = false;
-      }
+      }      
     }
   }
-
-  if (alertMatch) {
-    alert = true;
-    lastActivity = millis();
-    awakeDuration = (2 * 60 * 1000); // 2 minutes showing alert
-  }
+  return alertMatch;
 }
 
 
 // ----------------- Main listening mode -----------------
-void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuration) {  
+void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuration) {
+  static bool alert = false;
+  static float _Complex data[LISTEN_SAMPLES];
+  
   if (!alert and mode != -1) printListeningLogo();
   
-  analyzeSound();
-  getRellevantInfo();
-  alertMatching(lastActivity, awakeDuration);
-  if (alert) printAlert(debug);
+  analyzeSound(data);
+  getRellevantInfo(data);
+  alert = alertMatching(lastActivity);
+  if (alert) {
+    lastActivity = millis();
+    awakeDuration = (2 * 60 * 1000); // 2 minutes showing alert
+    printAlert(debug);
+    /* 
+    * You can implement here a Wifi communication if it's considered necessary.
+    * Think that you may need a communication queue with non-repeatable elements
+    * and keep the device awake until the end of the transmission queue.
+    */
+  }
 
   // info in listening mode.
   if (debug and !alert) showListeningInfo();
