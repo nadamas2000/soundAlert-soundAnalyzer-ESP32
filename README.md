@@ -1,7 +1,7 @@
 ### soundAlert-soundAnalyzer ESP32
  Alert system by frequency sound with sound analyzing tools. Made for Wifi Kit 32 V3 (ESP32)
 
-# Sound Analyzer Wifi Kit32
+# Alert detector / Sound Analyzer Wifi Kit32
 
 Description
 The Sound Analyzer Wifi Kit32 is a program that utilizes Arduino and various libraries to create a sound alert system. The main functionality of the code is to detect specific frequencies with certain intensities and display corresponding alerts on an OLED display.
