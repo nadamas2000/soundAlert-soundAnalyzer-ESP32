@@ -2,7 +2,7 @@
  * @file soundAnalysisToolsNamespaces.h
  * @brief Sound Analysis Tools Namespaces
  *
- * This file defines several namespaces for common sound analysis tools, display tools, and spectrum tools.
+ * @details This file defines several namespaces for common sound analysis tools, display tools, and spectrum tools.
  * The namespaces include variables and functions related to each specific area of functionality.
  *
  * @author Nahum Manuel Martín
@@ -52,6 +52,9 @@ namespace commonSpectrum {
 
   /**
    * @brief Acquires sound data.
+   *
+   * @details This function acquires sound data from an analog pin and stores it in the provided array.
+   *
    * @param data Pointer to complex sound data.
    * @param nSamples Number of samples to acquire.
    */
@@ -63,6 +66,16 @@ namespace commonSpectrum {
     } // 12.8 ms
   }
 
+  /**
+   * @brief Gets sound data and performs FFT.
+   *
+   * @details This function acquires sound data using `acquireSound()`, applies a window function,
+   * and performs the Fast Fourier Transform (FFT) on the acquired data.
+   *
+   * @param data Pointer to complex sound data array.
+   * @param nSamples Number of samples to acquire and process.
+   * @param log2Sample Log base 2 of the number of samples.
+   */
   void getData(float _Complex *data, int nSamples, int log2Sample) {
     acquireSound(data, nSamples);
     applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);

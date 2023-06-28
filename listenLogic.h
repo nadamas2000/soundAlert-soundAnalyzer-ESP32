@@ -22,10 +22,17 @@ int maxI_LISTEN = 0;
 
 // ----------------- Main listening mode -----------------
 /**
-* @brief Performs the main listening mode operation.
-* @param mode The current display mode.
-* @param debug Debug mode to show technical information
-*/
+ * @brief Performs the main operation of the listening mode.
+ *
+ * This function is responsible for analyzing the sound data, checking for alerts,
+ * and displaying relevant information on the display. If an alert is detected,
+ * it can also initiate a communication process if necessary.
+ *
+ * @param mode The current display mode.
+ * @param debug Debug mode to show technical information.
+ * @param lastActivity Reference to the last activity timestamp.
+ * @param awakeDuration Reference to the duration of device awake time.
+ */
 void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDuration);
 
 
@@ -76,8 +83,13 @@ void getRellevantInfo(float _Complex *data);
 
 // --------------- Check alerts ------------------------
 /**
-* @brief Checks if there is a match between the analyzed sound data and the defined alerts.
-*/
+ * @brief Checks if there is a match between the analyzed sound data and the defined alerts.
+ *
+ * This function checks if the maximum intensity and its corresponding index
+ * match any of the defined alerts.
+ *
+ * @return true if an alert is matched, false otherwise.
+ */
 bool alertMatching();
 
 

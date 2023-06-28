@@ -53,24 +53,24 @@ unsigned long lastActivity;
 
 
 /**
- * Prints a low battery alert on the OLED display.
+ * @brief Prints a low battery alert on the OLED display.
  */
 void printLowBatteryAlert();
 
 /**
- * Handles the activity logic of the program, including button presses, sound analysis,
+ * @brief Handles the activity logic of the program, including button presses, sound analysis,
  * and entering sleep mode.
  */
 void activityLogic();
 
 /**
- * Sets up the initial configuration of the program. This includes board initialization,
+ * @brief Sets up the initial configuration of the program. This includes board initialization,
  * display initialization, variable initialization, and verifying the wake-up reason.
  */
 void setup();
 
 /**
- * The main loop of the program. It handles the activity logic based on the battery status
+ * @brief The main loop of the program. It handles the activity logic based on the battery status
  * and triggers low battery alerts when necessary.
  */
 void loop();

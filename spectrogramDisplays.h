@@ -1,5 +1,5 @@
 /**
- * @file main.cpp
+ * @file spectrogramDisplays.h
  * @brief Spectrogram Display Functions
  *
  * This file contains the functions used to display spectrograms on a display.
@@ -30,6 +30,11 @@ float _Complex data[SAMPLES]; /**< Data array for the spectrogram */
 
 /**
  * @brief Prints a vertical line on the display.
+ *
+ * This function prints a vertical line on the display using the provided data array.
+ * It iterates over the frequency data points and calculates the amplitude to determine
+ * the color of each pixel in the line. The colors used are based on the provided array of colors.
+ *
  * @param data Pointer to the data array.
  * @param nbFreqD Number of frequency data points.
  * @param x X-coordinate of the line.
