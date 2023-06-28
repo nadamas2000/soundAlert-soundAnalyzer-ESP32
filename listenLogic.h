@@ -77,7 +77,7 @@ void getRellevantInfo(float _Complex *data);
 /**
 * @brief Checks if there is a match between the analyzed sound data and the defined alerts.
 */
-void alertMatching();
+bool alertMatching();
 
 
 
@@ -205,7 +205,7 @@ void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuratio
   
   analyzeSound(data);
   getRellevantInfo(data);
-  alert = alertMatching(lastActivity);
+  alert = alertMatching();
   if (alert) {
     lastActivity = millis();
     awakeDuration = (2 * 60 * 1000); // 2 minutes showing alert
