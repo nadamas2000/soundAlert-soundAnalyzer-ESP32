@@ -8,6 +8,7 @@
  * @author Nahum Manuel Martín
  * @date 2023/06/25
  */
+#pragma once
 
 #include "board.h"
 #include "display.h"
@@ -23,8 +24,8 @@ using namespace commonSoundAnalysisTools;
 using namespace minMax;
 
 // Globals
-const uint8_t MAXMODES = 9;
-int8_t currentMode = 0;
+const unsigned char MAXMODES = 9;
+short currentMode = 0;
 bool changeMode = false;
 unsigned long displayTitle[MAXMODES];
 
@@ -76,10 +77,10 @@ void selectDisplayMode();
 
 
 void initSoundAnalysisTools() {
-  for (uint8_t i = 0; i < MAXMODES; i++) {
+  for (unsigned char i = 0; i < MAXMODES; i++) {
     displayTitle[i] = 0;
   }
-
+  
   displayTitle[0] = millis();
 }
 
@@ -123,7 +124,7 @@ void checkButton() {
       lastActivity = millis();
 
       // Clear title on change
-      for (uint8_t i = 0; i < 7; i++) title[i] = "";
+      for (unsigned char i = 0; i < 7; i++) title[i] = "";
       displayTitle[currentMode] = millis();
     }
     buttonStatus = digitalRead(BUTTON_P_PIN);

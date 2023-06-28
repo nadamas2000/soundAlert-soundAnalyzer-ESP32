@@ -11,6 +11,9 @@
 
 #pragma once
 
+#include "board.h"
+#include "fft.h"
+
 /**
  * @namespace commonSoundAnalysisTools
  * @brief Namespace for common sound analysis tools.
@@ -25,8 +28,8 @@ namespace commonSoundAnalysisTools {
  * @brief Namespace for common display tools.
  */
 namespace commonDisplays {
-  uint16_t hOffset; /**< Horizontal offset variable. */
-  uint16_t graphH; /**< Graph height variable. */
+  unsigned short hOffset; /**< Horizontal offset variable. */
+  unsigned short graphH; /**< Graph height variable. */
 }
 
 /**
@@ -34,8 +37,8 @@ namespace commonDisplays {
  * @brief Namespace for minimum and maximum values.
  */
 namespace minMax {
-  int16_t ampMax = 0; /**< Maximum amplitude variable. */
-  int16_t ampMin = 4095; /**< Minimum amplitude variable. */
+  short ampMax = 0; /**< Maximum amplitude variable. */
+  short ampMin = 4095; /**< Minimum amplitude variable. */
 }
 
 /**
@@ -44,7 +47,7 @@ namespace minMax {
  */
 namespace commonSpectrum {
   long chronoRead; /**< Chrono read variable. */
-  const uint8_t MAX_FREQ = 16; /**< Maximum frequency (kHz). */
+  const unsigned char MAX_FREQ = 16; /**< Maximum frequency (kHz). */
   unsigned long sampling_period_us = round(1000ul * (1.0 / MAX_FREQ)); /**< Sampling period in microseconds. */
 
   /**
@@ -58,5 +61,11 @@ namespace commonSpectrum {
       data[i] = analogRead(MIC_PIN);
       while (micros() - chronoRead < sampling_period_us); // only if analogRead time < sampling_period_us
     } // 12.8 ms
+  }
+
+  void getData(float _Complex *data, int nSamples, int log2Sample) {
+    acquireSound(data, nSamples);
+    applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
+    performFFT(data, log2Sample, FFT_FORWARD);    
   }
 }

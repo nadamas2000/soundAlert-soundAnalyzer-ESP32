@@ -66,8 +66,8 @@ void displayAmplitudeBars(bool initial);
 
 // Code
 void displaySweepingEnvelope(bool initial) { 
-  static uint16_t i = 0;
-  static uint16_t ampPrev = 0;
+  static unsigned short i = 0;
+  static unsigned short ampPrev = 0;
 
   if (initial) {
     title[0] = "Sweeping";
@@ -85,21 +85,21 @@ void displaySweepingEnvelope(bool initial) {
     ampMin = MAX_READ_VALUE;
   }  
   
-  int16_t peakMax = -MAX_READ_VALUE;
-  int16_t peakMin = MAX_READ_VALUE;
+  short peakMax = -MAX_READ_VALUE;
+  short peakMin = MAX_READ_VALUE;
   chrono = micros(); // Sample window 10ms
   while (micros() - chrono < 10000ul) {
-    int16_t sample = analogRead(MIC_PIN) - SILENCE;
+    short sample = analogRead(MIC_PIN) - SILENCE;
     peakMax = max(sample, peakMax);
     peakMin = min(sample, peakMin);
   }  
 
-  int16_t x = peakMax - peakMin;
-  int16_t amp = map(x, 0, MAX_READ_VALUE - SILENCE, 0, DISPLAY_HEIGHT - hOffset);
-  amp = min(int16_t(DISPLAY_HEIGHT - hOffset), amp);
+  short x = peakMax - peakMin;
+  short amp = map(x, 0, MAX_READ_VALUE - SILENCE, 0, DISPLAY_HEIGHT - hOffset);
+  amp = min(short(DISPLAY_HEIGHT - hOffset), amp);
   // Sweeping effect
   
-  for (uint16_t j = 0; j < 7; j++) {
+  for (short j = 0; j < 7; j++) {
     int color = SSD1306_BLACK;
     if (j == 1) color = SSD1306_WHITE;
     display.drawFastVLine((i + j) % DISPLAY_WIDTH, hOffset, DISPLAY_HEIGHT, color);
@@ -133,7 +133,7 @@ void displaySweepingEnvelope(bool initial) {
 }
 
 void displayRunningEnvelope(bool initial) {
-  static int16_t data[DISPLAY_WIDTH] = {0};
+  static short data[DISPLAY_WIDTH] = {0};
 
   if (initial) {
     title[0] = "Running";
@@ -142,32 +142,32 @@ void displayRunningEnvelope(bool initial) {
     display.setTextSize(1); 
     display.cp437(true);  // Use full 256 char 'Code Page 437' font
     // Clear data
-    for (uint16_t i = 0; i < DISPLAY_WIDTH; i++) data[i] = 0;
+    for (unsigned short i = 0; i < DISPLAY_WIDTH; i++) data[i] = 0;
   }
   
   hOffset = FONT_HEIGHT;
-  int16_t lostSound = data[0];
-  for (uint16_t i = 0; i < DISPLAY_WIDTH - 1 ; i++) data[i] = data[i + 1]; // move data
+  short lostSound = data[0];
+  for (unsigned short i = 0; i < DISPLAY_WIDTH - 1 ; i++) data[i] = data[i + 1]; // move data
   
   chrono = micros(); // Sample window 10ms
   while (micros() - chrono < 10000ul) {
-    int16_t sample = analogRead(MIC_PIN) - SILENCE;
+    short sample = analogRead(MIC_PIN) - SILENCE;
     if (sample > ampMax) ampMax = sample;
     else if (sample < ampMin) ampMin = sample;
   }
 
-  int16_t x = ampMax - ampMin;
-  data[DISPLAY_WIDTH - 1] = map(x, 0, int16_t(MAX_READ_VALUE - SILENCE), 0, int16_t(DISPLAY_HEIGHT - hOffset));
-  data[DISPLAY_WIDTH - 1] = min(int16_t(DISPLAY_HEIGHT - hOffset), data[DISPLAY_WIDTH - 1]);
+  short x = ampMax - ampMin;
+  data[DISPLAY_WIDTH - 1] = map(x, 0, short(MAX_READ_VALUE - SILENCE), 0, short(DISPLAY_HEIGHT - hOffset));
+  data[DISPLAY_WIDTH - 1] = min(short(DISPLAY_HEIGHT - hOffset), data[DISPLAY_WIDTH - 1]);
 
   ampMin = DISPLAY_HEIGHT - hOffset;
   ampMax = 0;  
   display.drawLine (0, DISPLAY_HEIGHT - lostSound, 1, DISPLAY_HEIGHT - data[0], SSD1306_BLACK);
-  for (int16_t i = 1; i < DISPLAY_WIDTH; i++) {
+  for (short i = 1; i < DISPLAY_WIDTH; i++) {
     if (data[i] > ampMax) ampMax = data[i];
     if (data[i] < ampMin) ampMin = data[i];
-    display.drawLine (i, DISPLAY_HEIGHT - (int16_t)data[i - 1], i + 1, DISPLAY_HEIGHT - (int16_t)data[i], SSD1306_BLACK);
-    display.drawLine (i - 1, DISPLAY_HEIGHT - (int16_t)data[i - 1], i, DISPLAY_HEIGHT - (int16_t)data[i], SSD1306_WHITE);
+    display.drawLine (i, DISPLAY_HEIGHT - (short)data[i - 1], i + 1, DISPLAY_HEIGHT - (short)data[i], SSD1306_BLACK);
+    display.drawLine (i - 1, DISPLAY_HEIGHT - (short)data[i - 1], i, DISPLAY_HEIGHT - (short)data[i], SSD1306_WHITE);
   }  
 
   display.fillRect(0, 0, DISPLAY_WIDTH, FONT_HEIGHT, SSD1306_BLACK);  
@@ -181,9 +181,9 @@ void displayRunningEnvelope(bool initial) {
 }
 
 void displayAmplitudeBars(bool initial) {
-  static const uint16_t SAMPLES = 128;  // = DISPLAY_WIDTH
-  static int16_t data[SAMPLES];
-  static uint16_t midPoint_AMPB;
+  static const unsigned short SAMPLES = 128;  // = DISPLAY_WIDTH
+  static short data[SAMPLES];
+  static unsigned short midPoint_AMPB;
 
   if (initial) {
     title[0] = "Amplitude Bars";
@@ -197,9 +197,9 @@ void displayAmplitudeBars(bool initial) {
   ampMin = MAX_READ_VALUE;
   
   display.clearDisplay();
-  for (uint16_t i = 0; i < DISPLAY_WIDTH; i++) {
+  for (unsigned short i = 0; i < DISPLAY_WIDTH; i++) {
     data[i] = analogRead(MIC_PIN);
-    int16_t amplitude = data[i] - SILENCE;    
+    short amplitude = data[i] - SILENCE;    
     ampMax = max(ampMax, amplitude);
     ampMin = min(ampMin, amplitude);
     amplitude *= (float)graphH / (float)MAX_READ_VALUE;

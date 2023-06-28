@@ -106,3 +106,5 @@ void evaluateFFT(float _Complex *data, unsigned int log2_N, FftDir direction);
  * @param direction        The direction of the Fourier transform.
  */
 void performFFT(float _Complex *data, unsigned int log2_N, FftDir direction);
+
+

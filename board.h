@@ -18,7 +18,7 @@
  * @def MIC_PIN
  * @brief Pin number for the microphone.
  */
-const uint8_t MIC_PIN = 2;
+const unsigned char MIC_PIN = 2;
 
 /**
  * @def GPIO_MIC_PIN
@@ -30,13 +30,13 @@ gpio_num_t GPIO_MIC_PIN = GPIO_NUM_2;
  * @def BATTERY_PIN
  * @brief Pin number for the battery.
  */
-const uint8_t BATTERY_PIN = 1;
+const unsigned char BATTERY_PIN = 1;
 
 /**
  * @def BUTTON_P_PIN
  * @brief Pin number for the push button.
  */
-const uint8_t BUTTON_P_PIN = 0;
+const unsigned char BUTTON_P_PIN = 0;
 
 /**
  * @def MAX_READ_VALUE
@@ -44,13 +44,13 @@ const uint8_t BUTTON_P_PIN = 0;
  *
  * This value is used with ADC_11db attenuation.
  */
-const uint16_t MAX_READ_VALUE = 3000;
+const unsigned short MAX_READ_VALUE = 3000;
 
 /**
  * @def SILENCE
  * @brief Threshold value for silence detection.
  */
-const uint16_t SILENCE = 1450;
+const unsigned short SILENCE = 1450;
 
 /**
  * @brief Initializes the board and its components.

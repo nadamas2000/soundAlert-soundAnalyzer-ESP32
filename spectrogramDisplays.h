@@ -8,9 +8,10 @@
  * @date 2023/06/25
  */
 
+#pragma once
+
 #include "board.h"
 #include "display.h"
-#include "fft.h" // Fast Fourier Transform Algorithms
 
 // Namespaces
 #include "soundAnalysisToolsNamespaces.h"
@@ -19,11 +20,11 @@ using namespace commonDisplays;
 using namespace commonSpectrum;
 
 // Common Spectrogram variables
-const uint16_t SAMPLES = 128; /**< Number of samples in the spectrogram */
-const uint16_t N_COLORS = 2; /**< Number of colors in the spectrogram */
-const uint16_t colors[N_COLORS] = {SSD1306_BLACK, SSD1306_WHITE}; /**< Colors used in the spectrogram */
-uint16_t graphW; ///< Width of the graph
-uint16_t wOffset; ///< Offset for width
+const unsigned short SAMPLES = 128; /**< Number of samples in the spectrogram */
+const unsigned short N_COLORS = 2; /**< Number of colors in the spectrogram */
+const unsigned short colors[N_COLORS] = {SSD1306_BLACK, SSD1306_WHITE}; /**< Colors used in the spectrogram */
+unsigned short graphW; ///< Width of the graph
+unsigned short wOffset; ///< Offset for width
 int log2Sample = log(SAMPLES) / log(2); /**< Logarithm base 2 of the number of samples */
 float _Complex data[SAMPLES]; /**< Data array for the spectrogram */
 
@@ -35,7 +36,7 @@ float _Complex data[SAMPLES]; /**< Data array for the spectrogram */
  * @param nColors Number of colors.
  * @param colors Array of colors.
  */
-void printVLine(float _Complex *data, int nbFreqD, int x, uint16_t nColors, const uint16_t *colors);
+void printVLine(float _Complex *data, int nbFreqD, int x, unsigned short nColors, const unsigned short *colors);
 
 /**
  * @brief Displays the spectrogram.
@@ -70,13 +71,13 @@ void displayRunningSpectrogram(bool initial);
 void displaySweepingSpectrogram(bool initial);
 
 // Code
-void printVLine(float _Complex *data, int nbFreqD, int x, uint16_t nColors, const uint16_t *colors) {
+void printVLine(float _Complex *data, int nbFreqD, int x, unsigned short nColors, const unsigned short *colors) {
   for (int i = 1; i < nbFreqD; i++) {
     int amplitude = abs((int)creal(data[i]));
-    uint16_t iColor = map(amplitude, 0, 160, 0, nColors - 1);
+    unsigned short iColor = map(amplitude, 0, 160, 0, nColors - 1);
     if (iColor < 0) iColor = 0;
     if (iColor > nColors - 1) iColor = nColors - 1;
-    int16_t y = (DISPLAY_HEIGHT - hOffset) - i;
+    short y = (DISPLAY_HEIGHT - hOffset) - i;
     display.writePixel(x, y, colors[iColor]);
   }
 }
@@ -97,8 +98,8 @@ void displaySpectrogram(bool initial) {
     graphW = DISPLAY_WIDTH - wOffset;
 
     // print vertical axis
-    int16_t k = 1;
-    int16_t vDist = (k * 16) + hOffset + 4;
+    short k = 1;
+    short vDist = (k * 16) + hOffset + 4;
     do {      
       display.setCursor(0, DISPLAY_HEIGHT - vDist);
       display.println(String(k * 2)); // 128 samples -> *2
@@ -107,11 +108,11 @@ void displaySpectrogram(bool initial) {
     } while(vDist < DISPLAY_HEIGHT);
 
     // print horizontal axis
-    uint8_t marks = 5;
+    unsigned char marks = 5;
     String nums[marks] = {"0", "0.25", "0.5", "0.75", "1"};
-    for (uint8_t k = 0; k < marks; k++) {
-      int16_t mult = (DISPLAY_WIDTH - 1 - ((FONT_WIDTH * 2) + (nums[marks - 1].length() / 2))) / (marks - 1); // *2 by left and right margin, "1" by division margin error.
-      int16_t x = (6 + (k * mult)) - ((FONT_WIDTH * nums[k].length())/2);
+    for (unsigned char k = 0; k < marks; k++) {
+      short mult = (DISPLAY_WIDTH - 1 - ((FONT_WIDTH * 2) + (nums[marks - 1].length() / 2))) / (marks - 1); // *2 by left and right margin, "1" by division margin error.
+      short x = (6 + (k * mult)) - ((FONT_WIDTH * nums[k].length())/2);
       display.setCursor(x, graphH + 1);
       display.println(nums[k]);
     }
@@ -125,12 +126,10 @@ void displaySpectrogram(bool initial) {
   bool printedVLines[graphW] = { false };
   for (int j = 0; j < (int)nTimes; j++) {
     if (digitalRead(BUTTON_P_PIN) == LOW) return;   // Exit in the middle of calcs.    
-    acquireSound(data, SAMPLES);
-    applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-    performFFT(data, log2Sample, FFT_FORWARD);    
+    getData(data, SAMPLES, log2Sample); 
     if (j == 0) printVLine(data, graphH, wOffset, N_COLORS, colors);
     else {
-      int16_t x = (j * scaleW);
+      short x = (j * scaleW);
       while (x > 0 && !printedVLines[x]) {  // Print all Graphic if nTimes < spectrogramGraphW.
         printVLine(data, graphH, x + wOffset, N_COLORS, colors);
         printedVLines[x] = true;
@@ -154,7 +153,7 @@ void displaySpectrogram(bool initial) {
 }
 
 void displayRunningSpectrogram(bool initial) {
-  static uint16_t prevLines[DISPLAY_WIDTH][DISPLAY_HEIGHT]; /**< Previous lines in the running spectrogram */
+  static unsigned short prevLines[DISPLAY_WIDTH][DISPLAY_HEIGHT]; /**< Previous lines in the running spectrogram */
 
   if (initial) {
     title[0] = "Running";
@@ -165,15 +164,15 @@ void displayRunningSpectrogram(bool initial) {
     wOffset = FONT_WIDTH;
 
     // clear prevLines
-    for (int16_t i = 0; i < DISPLAY_WIDTH; i++) {
-      for (int16_t j = 0; j < DISPLAY_HEIGHT; j++) {
+    for (short i = 0; i < DISPLAY_WIDTH; i++) {
+      for (short j = 0; j < DISPLAY_HEIGHT; j++) {
         prevLines[i][j] = 0;
       }
     }
     
     // print vertical axis    
-    int16_t k = 1;
-    int16_t vDist = (k * 16) + 4;
+    short k = 1;
+    short vDist = (k * 16) + 4;
     do {      
       display.setCursor(0, (DISPLAY_HEIGHT + 1) - vDist);
       display.println(String(k * 2)); // 128 samples -> *2
@@ -182,23 +181,21 @@ void displayRunningSpectrogram(bool initial) {
     } while(vDist < DISPLAY_HEIGHT);
   }  
 
-  acquireSound(data, SAMPLES);
-  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-  performFFT(data, log2Sample, FFT_FORWARD);  
+  getData(data, SAMPLES, log2Sample);
 
-  for (uint16_t i = 1; i <= DISPLAY_HEIGHT; i++) {
+  for (unsigned short i = 1; i <= DISPLAY_HEIGHT; i++) {
     int amplitude = abs((int)creal(data[i+1]));
-    uint16_t iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
+    unsigned short iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
     if (iColor < 0) iColor = 0;
     if (iColor > N_COLORS - 1) iColor = N_COLORS - 1;
-    int16_t y = DISPLAY_HEIGHT - i;
+    short y = DISPLAY_HEIGHT - i;
     display.writePixel(wOffset, y, colors[iColor]);
     prevLines[wOffset][y] = colors[iColor];
   }
 
   // Print and move previous graphics.
-  for (int16_t i = DISPLAY_WIDTH - 2; i > wOffset; i--) {
-    for (int16_t j = 0; j < DISPLAY_HEIGHT; j++) {
+  for (short i = DISPLAY_WIDTH - 2; i > wOffset; i--) {
+    for (short j = 0; j < DISPLAY_HEIGHT; j++) {
       prevLines[i][j] = prevLines[i - 1][j];      
       display.writePixel(i, j, prevLines[i][j]);
     }
@@ -212,7 +209,7 @@ void displayRunningSpectrogram(bool initial) {
 }
 
 void displaySweepingSpectrogram(bool initial) {
-  static uint16_t xPos = 0; /**< X position of the sweeping spectrogram */
+  static unsigned short xPos = 0; /**< X position of the sweeping spectrogram */
 
   if (initial) {
     title[0] = "Sweeping";
@@ -225,19 +222,17 @@ void displaySweepingSpectrogram(bool initial) {
     xPos = 0;
     
     // print vertical axis    
-    int16_t k = 1;
-    int16_t vDist = (k * 16) + 4;
+    short k = 1;
+    short vDist = (k * 16) + 4;
     do {      
       display.setCursor(0, (DISPLAY_HEIGHT + 1) - vDist);
       display.println(String(k * 2)); // 128 samples -> *2
       k++;
       vDist = (k * 16) + 4;
     } while(vDist < DISPLAY_HEIGHT);
-  }  
+  }
 
-  acquireSound(data, SAMPLES);
-  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-  performFFT(data, log2Sample, FFT_FORWARD);  
+  getData(data, SAMPLES, log2Sample);
   
   // Sweeping effect
   display.drawFastVLine(xPos + wOffset + 1, 0, DISPLAY_HEIGHT, SSD1306_WHITE);
@@ -246,12 +241,12 @@ void displaySweepingSpectrogram(bool initial) {
   display.drawFastVLine(xPos + wOffset + 4, 0, DISPLAY_HEIGHT, SSD1306_BLACK);
 
   // Draw data
-  for (uint16_t i = 1; i <= DISPLAY_HEIGHT; i++) {
+  for (unsigned short i = 1; i <= DISPLAY_HEIGHT; i++) {
     int amplitude = abs((int)creal(data[i + 1]));
-    uint16_t iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
+    unsigned short iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
     if (iColor < 0) iColor = 0;
     if (iColor > N_COLORS - 1) iColor = N_COLORS - 1;
-    int16_t y = DISPLAY_HEIGHT - i;
+    short y = DISPLAY_HEIGHT - i;
     display.writePixel(xPos + wOffset, y, colors[iColor]);
   }
   xPos = (xPos + 1) % graphW;

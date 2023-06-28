@@ -8,10 +8,11 @@
 * @date 2023/06/25
 */
 
+#include "alerts.h"
+#include "fft.h"
 #include "board.h"
 #include "display.h"
-#include "alerts.h"
-#include "fft.h" // Fast Fourier Transform Algorithms
+
 
 // -------------- Listening global variables and constants ------------------
 const int LISTEN_SAMPLES = 1024;
@@ -25,7 +26,7 @@ int maxI_LISTEN = 0;
 * @param mode The current display mode.
 * @param debug Debug mode to show technical information
 */
-void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuration);
+void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDuration);
 
 
 
@@ -80,11 +81,10 @@ void getRellevantInfo(float _Complex *data);
 bool alertMatching();
 
 
-
 // ---------------- Printing images and info --------------------
 void printListeningLogo() {
-  int xCenter = (DISPLAY_WIDTH - mic_logo_img.getWidth()) / 2;
-  int yCenter = (DISPLAY_HEIGHT - mic_logo_img.getHeight()) / 2;
+  short xCenter = (DISPLAY_WIDTH - mic_logo_img.getWidth()) / 2;
+  short yCenter = (DISPLAY_HEIGHT - mic_logo_img.getHeight()) / 2;
   display.clearDisplay();
   display.drawXBitmap(xCenter, yCenter, mic_logo_img.getData(), mic_logo_img.getWidth(), mic_logo_img.getHeight(), SSD1306_WHITE);
   display.display();
@@ -113,7 +113,7 @@ void printAlert(bool debug) {
   display.clearDisplay();
   if (debug) {
     display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);  
-    for (int i = 0; i < N_ALERT_TYPES; i++) {
+    for (short i = 0; i < N_ALERT_TYPES; i++) {
       if (alerts[i].alertStatus) {
         display.setCursor(0, 0);
         display.println("Alert! " + String(i));
@@ -126,7 +126,7 @@ void printAlert(bool debug) {
       }
     }  
   } else {
-    for (int i = 0; i < N_ALERT_TYPES; i++) {
+    for (short i = 0; i < N_ALERT_TYPES; i++) {
       if (alerts[i].alertStatus) drawAlertImages(alerts[i]);
     }
   }
@@ -182,7 +182,7 @@ void getRellevantInfo(float _Complex *data) {
 // --------------- Check alerts ------------------------
 bool alertMatching() {
   bool alertMatch = false;
-  for (int i = 0; i < N_ALERT_TYPES; i++) {
+  for (short i = 0; i < N_ALERT_TYPES; i++) {
     if (maxI_LISTEN == alerts[i].iteratorMark and max_LISTEN > alerts[i].minIntensity){
       alertMatch = true;
       alerts[i].alertStatus = true; 
@@ -197,7 +197,7 @@ bool alertMatching() {
 
 
 // ----------------- Main listening mode -----------------
-void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuration) {
+void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDuration) {
   static bool alert = false;
   static float _Complex data[LISTEN_SAMPLES];
   
@@ -221,3 +221,4 @@ void listen(int mode, bool debug, unsigned long &lastActivity, int &awakeDuratio
   if (debug and !alert) showListeningInfo();
   
 }
+

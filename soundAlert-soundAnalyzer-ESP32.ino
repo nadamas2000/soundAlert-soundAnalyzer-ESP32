@@ -80,8 +80,8 @@ void printLowBatteryAlert() {
   // Low battery alert
   display.clearDisplay();
   delay(500);
-  int16_t x = (DISPLAY_WIDTH - low_battery_img.getWidth()) / 2;
-  int16_t y = (DISPLAY_HEIGHT - low_battery_img.getHeight()) / 2;
+  short x = (DISPLAY_WIDTH - low_battery_img.getWidth()) / 2;
+  short y = (DISPLAY_HEIGHT - low_battery_img.getHeight()) / 2;
   display.drawXBitmap(x, y, low_battery_img.getData(), low_battery_img.getWidth(), low_battery_img.getHeight(), SSD1306_WHITE);
   display.display();
   delay(500);

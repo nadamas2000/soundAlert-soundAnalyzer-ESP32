@@ -16,8 +16,8 @@
  */
 class Xbm {
 private:
-  int width; /**< The width of the image. */
-  int height; /**< The height of the image. */
+  short width; /**< The width of the image. */
+  short height; /**< The height of the image. */
   const unsigned char* data; /**< The pixel data of the image. */
 
 public:
@@ -27,14 +27,14 @@ public:
    * @param h The height of the image.
    * @param d The pixel data of the image.
    */
-  Xbm(int w, int h, const unsigned char* d)
+  Xbm(short w, short h, const unsigned char* d)
     : width(w), height(h), data(d) {}
 
   /**
    * @brief Gets the width of the image.
    * @return The width of the image.
    */
-  int getWidth() const {
+  short getWidth() const {
     return width;
   }
 
@@ -42,7 +42,7 @@ public:
    * @brief Gets the height of the image.
    * @return The height of the image.
    */
-  int getHeight() const {
+  short getHeight() const {
     return height;
   }
 

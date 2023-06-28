@@ -25,14 +25,14 @@
  * @brief Reset pin for OLED display.
  * Set to -1 if sharing Arduino reset pin.
  */
-const uint8_t OLED_RESET = 21;
+const unsigned char OLED_RESET = 21;
 
 /**
  * @brief Screen address for OLED display.
  * See datasheet for Address.
  * Use 0x3D for 128x64, 0x3C for 128x32 or Wifi Kit 32 (128x64).
  */
-const int SCREEN_ADDRESS = 0x3C;
+const char SCREEN_ADDRESS = 0x3C;
 
 #include <Adafruit_SSD1306.h>
 /**
@@ -43,12 +43,12 @@ Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire1, OLED_RESET);
 /**
  * @brief Font size 1 - Height in pixels.
  */
-const uint16_t FONT_HEIGHT = 9;
+const unsigned short FONT_HEIGHT = 9;
 
 /**
  * @brief Font size 1 - Width in pixels.
  */
-const uint16_t FONT_WIDTH = 6;
+const unsigned short FONT_WIDTH = 6;
 
 
 // ---------------------- Initialize display ----------------------

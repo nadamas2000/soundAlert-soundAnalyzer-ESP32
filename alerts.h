@@ -19,7 +19,7 @@
  */
 struct AlertElement {
   // Fixed data
-  uint16_t freq; /**< Frequency in Hz. Fixed information. */
+  unsigned short freq; /**< Frequency in Hz. Fixed information. */
   int minIntensity; /**< Minimum intensity. Fixed parameter. */
   int iteratorMark; /**< Iterator mark. Fixed parameter. */
 
@@ -27,20 +27,20 @@ struct AlertElement {
   int intensityMark; /**< Intensity mark. */
 
   // Image 1 properties
-  int16_t image1_xPos; /**< X position of image 1. */
-  int16_t image1_yPos; /**< Y position of image 1. */
+  short image1_xPos; /**< X position of image 1. */
+  short image1_yPos; /**< Y position of image 1. */
   const Xbm *image1; /**< Pointer to image 1. */
 
   // Image 2 properties
-  int16_t image2_xPos; /**< X position of image 2. */
-  int16_t image2_yPos; /**< Y position of image 2. */
+  short image2_xPos; /**< X position of image 2. */
+  short image2_yPos; /**< Y position of image 2. */
   const Xbm *image2; /**< Pointer to image 2. */
 
   bool alertStatus; /**< Alert status. */
 };
 
 // ---------- Constants --------------
-const uint8_t N_ALERT_TYPES = 2;
+const unsigned char N_ALERT_TYPES = 2;
 static AlertElement alerts[N_ALERT_TYPES];
 
 // ---------- Function Prototypes --------------

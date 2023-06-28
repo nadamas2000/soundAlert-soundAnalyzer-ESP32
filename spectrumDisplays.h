@@ -14,9 +14,10 @@
  * @date 2023/06/25
  */
 
+#pragma once
+
 #include "board.h"
 #include "display.h"
-#include "fft.h" // Fast Fourier Transform Algorithms
 
 // Namespaces
 #include "soundAnalysisToolsNamespaces.h"
@@ -37,7 +38,7 @@ using namespace minMax;
  * @param data The array containing the spectrum data.
  * @param peak The array storing the peak values.
  */
-void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t *peak);
+void printSpectrumContinuousLineGraphic(unsigned short SAMPLES, float _Complex *data, unsigned char *peak);
 
 /**
  * @brief Prints the spectrum display with vertical lines.
@@ -50,7 +51,7 @@ void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, 
  * @param data The array containing the spectrum data.
  * @param peak The array storing the peak values.
  */
-void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t *peak);
+void printSpectrumVLinesGraphic(unsigned short SAMPLES, float _Complex *data, unsigned char *peak);
 
 /**
  * @brief Displays the spectrum.
@@ -65,7 +66,7 @@ void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t 
  * @param initial Specifies if it's the initial display.
  * @param mode The display mode (0 for vertical lines, 1 for continuous line).
  */
-void displaySpectrum(bool initial, int mode);
+void displaySpectrum(bool initial, unsigned char mode);
 
 /**
  * @brief Displays the spectrum bars.
@@ -83,7 +84,7 @@ void displaySpectrumBars(bool initial);
   
 
 // Code
-void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t *peak) {
+void printSpectrumContinuousLineGraphic(unsigned short SAMPLES, float _Complex *data, unsigned char *peak) {
   static long chronoInfo;
   static int freqMaxInfo;
   static int ampMaxInfo;
@@ -93,10 +94,10 @@ void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, 
   hOffset = FONT_HEIGHT;
   graphH = DISPLAY_HEIGHT - hOffset;  
   ampMax = 0;
-  uint16_t imax = 0;
-  uint8_t prevPeak = -1;
+  unsigned short imax = 0;
+  unsigned char prevPeak = -1;
   int peakInterval = 3; // recomends odd number;
-  for (uint16_t i = 1; i < min(nFreq, DISPLAY_WIDTH); i++) {    
+  for (unsigned short i = 1; i < min(nFreq, DISPLAY_WIDTH); i++) {    
     double currentAmplitude = creal(data[i]);
     double nextAmplitude = creal(data[i + 1]);
     if (i == DISPLAY_WIDTH - 1) nextAmplitude == currentAmplitude;    
@@ -104,10 +105,10 @@ void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, 
       ampMax = (int)currentAmplitude;
       imax = i;
     }
-    int cAmp = map(currentAmplitude, 0.0, (double)MAX_READ_VALUE * 2, 0.0, (double)graphH);
-    int nAmp = map(nextAmplitude, 0.0, (double)MAX_READ_VALUE * 2, 0.0, (double)graphH);
-    cAmp = max(0, cAmp);
-    nAmp = max(0, nAmp);
+    short cAmp = map(currentAmplitude, 0.0, (double)MAX_READ_VALUE * 2, 0.0, (double)graphH);
+    short nAmp = map(nextAmplitude, 0.0, (double)MAX_READ_VALUE * 2, 0.0, (double)graphH);
+    cAmp = max(short(0), cAmp);
+    nAmp = max(short(0), nAmp);
     display.drawLine(i - 1, graphH - cAmp, i, graphH - nAmp, SSD1306_WHITE);
 
     // Print peak    
@@ -120,8 +121,8 @@ void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, 
         }        
       }      
       maxPeak = map(maxPeak, 0, MAX_READ_VALUE * 2, 0, graphH);
-      peak[i] = max((uint8_t)maxPeak, peak[i]);
-      peak[i] = min(peak[i], (uint8_t)graphH);
+      peak[i] = max((unsigned char)maxPeak, peak[i]);
+      peak[i] = min(peak[i], (unsigned char)graphH);
       if (prevPeak >= 0 && i > 1) {
         display.drawLine(i - peakInterval, graphH - prevPeak, i, graphH - peak[i], SSD1306_WHITE);
       }
@@ -155,18 +156,18 @@ void printSpectrumContinuousLineGraphic(uint16_t SAMPLES, float _Complex *data, 
   } 
 }
 
-void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t *peak) {
+void printSpectrumVLinesGraphic(unsigned short SAMPLES, float _Complex *data, unsigned char *peak) {
   static long chronoInfo;
   static int freqMaxInfo;
   static int ampMaxInfo;
-  const int lowFilterInfo = 800;  
+  const short lowFilterInfo = 800;  
 
   int nFreq = SAMPLES / 2;
   hOffset = FONT_HEIGHT;
   graphH = DISPLAY_HEIGHT - hOffset; 
   ampMax = 0;
-  uint16_t imax = 0;
-  for (uint16_t i = 1; i < min(nFreq, (int)DISPLAY_WIDTH); i++) {
+  unsigned short imax = 0;
+  for (unsigned short i = 1; i < min(nFreq, (int)DISPLAY_WIDTH); i++) {
     // Extract amplitude and max. 
     int amplitude = max(0, (int)creal(data[i]));
     if (amplitude > ampMax) {
@@ -175,7 +176,7 @@ void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t 
     }
 
     // Print vertical line
-    int reducedAmplitude = map(amplitude, 0, MAX_READ_VALUE * 2, 0, graphH);
+    short reducedAmplitude = map(amplitude, 0, MAX_READ_VALUE * 2, 0, graphH);
     display.drawFastVLine(i - 1, graphH - reducedAmplitude, reducedAmplitude, SSD1306_WHITE);
     
     // Print peak
@@ -184,10 +185,10 @@ void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t 
       if (i > 1) maxPeak = max(maxPeak, max(0, (int)creal(data[i - 1])));
       if (i < DISPLAY_WIDTH - 1) maxPeak = max(maxPeak, max(0, (int)creal(data[i + 1])));      
       maxPeak = map(maxPeak, 0, MAX_READ_VALUE * 2, 0, graphH);
-      peak[i] = max((uint8_t)maxPeak, peak[i]);
-      peak[i] = min(peak[i], (uint8_t)graphH);
+      peak[i] = max((unsigned char)maxPeak, peak[i]);
+      peak[i] = min(peak[i], (unsigned char)graphH);
       if (peak[i] > 8) {
-        int y = graphH - peak[i];
+        short y = graphH - peak[i];
         display.drawLine(i - 1, y, i + 1, y, SSD1306_WHITE);
         peak[i] -= 1;
       }
@@ -221,11 +222,11 @@ void printSpectrumVLinesGraphic(uint16_t SAMPLES, float _Complex *data, uint8_t 
   } 
 }
 
-void displaySpectrum(bool initial, int mode) {
-  static const uint16_t SAMPLES = 256;
+void displaySpectrum(bool initial, unsigned char mode) {
+  static const unsigned short SAMPLES = 256;
   static const int log2Sample = log(SAMPLES) / log(2); 
   static float _Complex data[SAMPLES];
-  static uint8_t peak[SAMPLES] = {0};
+  static unsigned char peak[SAMPLES] = {0};
 
   if (mode == 0) {
     title[0] = "Spectrum";
@@ -236,18 +237,16 @@ void displaySpectrum(bool initial, int mode) {
     title[1] = "Continuous Line";
   }
 
-  acquireSound(data, SAMPLES);
-  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-  performFFT(data, log2Sample, FFT_FORWARD);  
+  getData(data, SAMPLES, log2Sample);
 
   int nFreq = SAMPLES / 2;
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);  
   display.setTextSize(1);
   float freqs[6] = {1, 2, 3, 4, 5, 6};
-  for (int i = 0; i < 6; i++) {
+  for (unsigned char i = 0; i < 6; i++) {
     String numTxt = String((int)freqs[i]);
-    int pos = (16 * freqs[i]) - ((FONT_WIDTH * numTxt.length()) / 2);
+    short pos = (16 * freqs[i]) - ((FONT_WIDTH * numTxt.length()) / 2);
     display.setCursor(pos, DISPLAY_HEIGHT - FONT_HEIGHT + 2);    
     display.println(numTxt);
   }
@@ -260,7 +259,7 @@ void displaySpectrum(bool initial, int mode) {
 }
 
 void displaySpectrumBars(bool initial) {
-  static const uint16_t SAMPLES = 128;
+  static const unsigned short SAMPLES = 128;
   static const int log2Sample = log(SAMPLES) / log(2);
   static float _Complex data[SAMPLES];
 
@@ -270,18 +269,16 @@ void displaySpectrumBars(bool initial) {
     graphH = DISPLAY_HEIGHT - hOffset;
   }  
 
-  acquireSound(data, SAMPLES);
-  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-  performFFT(data, log2Sample, FFT_FORWARD);
+  getData(data, SAMPLES, log2Sample);
 
   int nFreq = SAMPLES / 2;
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
   const float freqs[4] = {1, 2, 3, 4};
-  for (int i = 0; i < 4; i++) {
+  for (unsigned char i = 0; i < 4; i++) {
     String numTxt = String((int)freqs[i] * 2);    
-    int pos = (31 * freqs[i]) - ((FONT_WIDTH * numTxt.length()) / 2);
+    short pos = (31 * freqs[i]) - ((FONT_WIDTH * numTxt.length()) / 2);
     display.setCursor(pos, graphH + 1);
     display.println(numTxt);
   }
@@ -289,11 +286,11 @@ void displaySpectrumBars(bool initial) {
   display.setCursor(0, graphH + 1);
   display.println("kHz");  
   
-  for (uint16_t i = 0; i < 16; i++) {
-    int amplitude = 0;
-    for (uint16_t j = 0; j < 4; j++) {
+  for (short i = 0; i < 16; i++) {
+    short amplitude = 0;
+    for (short j = 0; j < 4; j++) {
       int sample = (int)creal(data[i * 4 + j + 2]);
-      int candidate = map(sample, 0, MAX_READ_VALUE, 0, graphH);
+      short candidate = map(sample, 0, MAX_READ_VALUE, 0, graphH);
       if (amplitude < candidate) amplitude = candidate;
     }
     display.fillRect(i * 8, DISPLAY_HEIGHT - hOffset - amplitude, 6, amplitude, SSD1306_WHITE);
