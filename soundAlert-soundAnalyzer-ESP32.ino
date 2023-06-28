@@ -44,9 +44,7 @@
 bool debug = false;
 
 // Alerts and times globals
-const int SECONDS_LISTENING_ON_WAKE_UP = 2;
-const int MINUTES_AWAKE = 2;
-int awakeDuration = SECONDS_LISTENING_ON_WAKE_UP * 1000;
+int awakeDuration = 2 * 1000; // Two seconds by default in listening mode.
 unsigned long lastActivity;
 #include "listenLogic.h"
 
@@ -90,12 +88,18 @@ void printLowBatteryAlert() {
 }
 
 void activityLogic() {  
-  if (millis() - lastActivity < awakeDuration) {
+  static bool toolSection = false;
+
+  if (millis() - lastActivity < awakeDuration) { 
     checkButton();
+    toolSection = toolSection or changeMode;
     if (!toolSection) {
-      listen(mode, debug, lastActivity, awakeDuration);
-      mode = -1;
-    } else selectDisplayMode();
+      listen(currentMode, debug, lastActivity, awakeDuration);
+      currentMode = -1;
+    } else {
+      toolSection = true;
+      selectDisplayMode();
+    }
   } else goToSleep();
 }
 

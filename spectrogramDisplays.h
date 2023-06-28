@@ -19,11 +19,11 @@ using namespace commonDisplays;
 using namespace commonSpectrum;
 
 // Common Spectrogram variables
+const uint16_t SAMPLES = 128; /**< Number of samples in the spectrogram */
+const uint16_t N_COLORS = 2; /**< Number of colors in the spectrogram */
+const uint16_t colors[N_COLORS] = {SSD1306_BLACK, SSD1306_WHITE}; /**< Colors used in the spectrogram */
 uint16_t graphW; ///< Width of the graph
 uint16_t wOffset; ///< Offset for width
-const uint16_t N_COULORS = 2; /**< Number of colors in the spectrogram */
-const uint16_t SAMPLES = 128; /**< Number of samples in the spectrogram */
-const uint16_t colors[N_COULORS] = {SSD1306_BLACK, SSD1306_WHITE}; /**< Colors used in the spectrogram */
 int log2Sample = log(SAMPLES) / log(2); /**< Logarithm base 2 of the number of samples */
 float _Complex data[SAMPLES]; /**< Data array for the spectrogram */
 
@@ -128,11 +128,11 @@ void displaySpectrogram(bool initial) {
     acquireSound(data, SAMPLES);
     applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
     performFFT(data, log2Sample, FFT_FORWARD);    
-    if (j == 0) printVLine(data, graphH, wOffset, N_COULORS, colors);
+    if (j == 0) printVLine(data, graphH, wOffset, N_COLORS, colors);
     else {
       int16_t x = (j * scaleW);
       while (x > 0 && !printedVLines[x]) {  // Print all Graphic if nTimes < spectrogramGraphW.
-        printVLine(data, graphH, x + wOffset, N_COULORS, colors);
+        printVLine(data, graphH, x + wOffset, N_COLORS, colors);
         printedVLines[x] = true;
         x--;
       }    
@@ -188,9 +188,9 @@ void displayRunningSpectrogram(bool initial) {
 
   for (uint16_t i = 1; i <= DISPLAY_HEIGHT; i++) {
     int amplitude = abs((int)creal(data[i+1]));
-    uint16_t iColor = map(amplitude, 0, 160, 0, N_COULORS - 1);
+    uint16_t iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
     if (iColor < 0) iColor = 0;
-    if (iColor > N_COULORS - 1) iColor = N_COULORS - 1;
+    if (iColor > N_COLORS - 1) iColor = N_COLORS - 1;
     int16_t y = DISPLAY_HEIGHT - i;
     display.writePixel(wOffset, y, colors[iColor]);
     prevLines[wOffset][y] = colors[iColor];
@@ -248,9 +248,9 @@ void displaySweepingSpectrogram(bool initial) {
   // Draw data
   for (uint16_t i = 1; i <= DISPLAY_HEIGHT; i++) {
     int amplitude = abs((int)creal(data[i + 1]));
-    uint16_t iColor = map(amplitude, 0, 160, 0, N_COULORS - 1);
+    uint16_t iColor = map(amplitude, 0, 160, 0, N_COLORS - 1);
     if (iColor < 0) iColor = 0;
-    if (iColor > N_COULORS - 1) iColor = N_COULORS - 1;
+    if (iColor > N_COLORS - 1) iColor = N_COLORS - 1;
     int16_t y = DISPLAY_HEIGHT - i;
     display.writePixel(xPos + wOffset, y, colors[iColor]);
   }

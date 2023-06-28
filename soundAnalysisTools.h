@@ -24,9 +24,8 @@ using namespace minMax;
 
 // Globals
 const uint8_t MAXMODES = 9;
-int8_t mode = 0;
+int8_t currentMode = 0;
 bool changeMode = false;
-bool toolSection = false;
 unsigned long displayTitle[MAXMODES];
 
 
@@ -44,10 +43,8 @@ void initSoundAnalysisTools();
  * @details This function displays the title of the current mode on the display for a
  * specific duration. After the duration has elapsed, the title is cleared
  * from the display.
- *
- * @param mode The current display mode.
  */
-void showTitle(uint8_t mode);
+void showTitle();
 
 /**
  * @brief Print the title lines on the display.
@@ -83,15 +80,15 @@ void initSoundAnalysisTools() {
     displayTitle[i] = 0;
   }
 
-  displayTitle[mode] = millis();
+  displayTitle[0] = millis();
 }
 
-void showTitle(uint8_t mode) {
+void showTitle() {
   static unsigned long timeDisplayTitle = 2000ul;
 
-  if (displayTitle[mode] > 0ul) {
-    if ((millis() - displayTitle[mode]) > timeDisplayTitle) {
-      displayTitle[mode] = 0ul;
+  if (displayTitle[currentMode] > 0ul) {
+    if ((millis() - displayTitle[currentMode]) > timeDisplayTitle) {
+      displayTitle[currentMode] = 0ul;
     } 
   } 
 }
@@ -113,22 +110,21 @@ void printTitle(bool black) {
 void checkButton() {
   static unsigned long chronoButton = millis();
   static bool buttonStatus = digitalRead(BUTTON_P_PIN);
-
+  
   changeMode = false;
   // Push the button to change modes
   if (millis() - chronoButton > 500ul) {    
     if (buttonStatus != digitalRead(BUTTON_P_PIN) && buttonStatus == LOW) { // Modes up
       delay(30);
-      mode = (mode + 1) % MAXMODES;
+      currentMode = (currentMode + 1) % MAXMODES;
       changeMode = true;
       chronoButton = millis();
-      awakeDuration = (MINUTES_AWAKE * 60 * 1000);
+      awakeDuration = (2 * 60 * 1000); // Two minutes showing the current mode
       lastActivity = millis();
-      toolSection = true;
 
       // Clear title on change
       for (uint8_t i = 0; i < 7; i++) title[i] = "";
-      displayTitle[mode] = millis();
+      displayTitle[currentMode] = millis();
     }
     buttonStatus = digitalRead(BUTTON_P_PIN);
   }
@@ -137,8 +133,8 @@ void checkButton() {
 void selectDisplayMode() {
   static bool prevShowTitle = true;
 
-  showTitle(mode);
-  switch (mode) {
+  showTitle();
+  switch (currentMode) {
     case 0: // Display spectrum 
       displaySpectrum(changeMode, 0);
       break;
@@ -170,7 +166,7 @@ void selectDisplayMode() {
       break;
   }
 
-  if (displayTitle[mode] > 0ul) {
+  if (displayTitle[currentMode] > 0ul) {
     printTitle(false);
     prevShowTitle = true;
   } else if (prevShowTitle) {

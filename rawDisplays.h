@@ -18,13 +18,6 @@ using namespace commonSoundAnalysisTools;
 using namespace commonDisplays;
 using namespace minMax;
 
-// Running Envelope global variables
-int16_t sound_RENV[DISPLAY_WIDTH] = {0};
-
-// Amplitude bars global variables
-#define AMPLITUDE_BARS_SAMPLES 128  // = DISPLAY_WIDTH
-int16_t sound_AMPB[AMPLITUDE_BARS_SAMPLES];
-uint16_t midPoint_AMPB;
 
 // Headers
 /**
@@ -139,7 +132,9 @@ void displaySweepingEnvelope(bool initial) {
   ++i;
 }
 
-void displayRunningEnvelope(bool initial) {  
+void displayRunningEnvelope(bool initial) {
+  static int16_t data[DISPLAY_WIDTH] = {0};
+
   if (initial) {
     title[0] = "Running";
     title[1] = "Envelope";
@@ -147,12 +142,12 @@ void displayRunningEnvelope(bool initial) {
     display.setTextSize(1); 
     display.cp437(true);  // Use full 256 char 'Code Page 437' font
     // Clear data
-    for (uint16_t i = 0; i < DISPLAY_WIDTH; i++) sound_RENV[i] = 0;
+    for (uint16_t i = 0; i < DISPLAY_WIDTH; i++) data[i] = 0;
   }
   
   hOffset = FONT_HEIGHT;
-  int16_t lostSound = sound_RENV[0];
-  for (uint16_t i = 0; i < DISPLAY_WIDTH - 1 ; i++) sound_RENV[i] = sound_RENV[i + 1]; // move data
+  int16_t lostSound = data[0];
+  for (uint16_t i = 0; i < DISPLAY_WIDTH - 1 ; i++) data[i] = data[i + 1]; // move data
   
   chrono = micros(); // Sample window 10ms
   while (micros() - chrono < 10000ul) {
@@ -162,17 +157,17 @@ void displayRunningEnvelope(bool initial) {
   }
 
   int16_t x = ampMax - ampMin;
-  sound_RENV[DISPLAY_WIDTH - 1] = map(x, 0, int16_t(MAX_READ_VALUE - SILENCE), 0, int16_t(DISPLAY_HEIGHT - hOffset));
-  sound_RENV[DISPLAY_WIDTH - 1] = min(int16_t(DISPLAY_HEIGHT - hOffset), sound_RENV[DISPLAY_WIDTH - 1]);
+  data[DISPLAY_WIDTH - 1] = map(x, 0, int16_t(MAX_READ_VALUE - SILENCE), 0, int16_t(DISPLAY_HEIGHT - hOffset));
+  data[DISPLAY_WIDTH - 1] = min(int16_t(DISPLAY_HEIGHT - hOffset), data[DISPLAY_WIDTH - 1]);
 
   ampMin = DISPLAY_HEIGHT - hOffset;
   ampMax = 0;  
-  display.drawLine (0, DISPLAY_HEIGHT - lostSound, 1, DISPLAY_HEIGHT - sound_RENV[0], SSD1306_BLACK);
+  display.drawLine (0, DISPLAY_HEIGHT - lostSound, 1, DISPLAY_HEIGHT - data[0], SSD1306_BLACK);
   for (int16_t i = 1; i < DISPLAY_WIDTH; i++) {
-    if (sound_RENV[i] > ampMax) ampMax = sound_RENV[i];
-    if (sound_RENV[i] < ampMin) ampMin = sound_RENV[i];
-    display.drawLine (i, DISPLAY_HEIGHT - (int16_t)sound_RENV[i - 1], i + 1, DISPLAY_HEIGHT - (int16_t)sound_RENV[i], SSD1306_BLACK);
-    display.drawLine (i - 1, DISPLAY_HEIGHT - (int16_t)sound_RENV[i - 1], i, DISPLAY_HEIGHT - (int16_t)sound_RENV[i], SSD1306_WHITE);
+    if (data[i] > ampMax) ampMax = data[i];
+    if (data[i] < ampMin) ampMin = data[i];
+    display.drawLine (i, DISPLAY_HEIGHT - (int16_t)data[i - 1], i + 1, DISPLAY_HEIGHT - (int16_t)data[i], SSD1306_BLACK);
+    display.drawLine (i - 1, DISPLAY_HEIGHT - (int16_t)data[i - 1], i, DISPLAY_HEIGHT - (int16_t)data[i], SSD1306_WHITE);
   }  
 
   display.fillRect(0, 0, DISPLAY_WIDTH, FONT_HEIGHT, SSD1306_BLACK);  
@@ -185,7 +180,11 @@ void displayRunningEnvelope(bool initial) {
   display.println(text);
 }
 
-void displayAmplitudeBars(bool initial) {  
+void displayAmplitudeBars(bool initial) {
+  static const uint16_t SAMPLES = 128;  // = DISPLAY_WIDTH
+  static int16_t data[SAMPLES];
+  static uint16_t midPoint_AMPB;
+
   if (initial) {
     title[0] = "Amplitude Bars";
     hOffset = FONT_HEIGHT - 1;
@@ -199,8 +198,8 @@ void displayAmplitudeBars(bool initial) {
   
   display.clearDisplay();
   for (uint16_t i = 0; i < DISPLAY_WIDTH; i++) {
-    sound_AMPB[i] = analogRead(MIC_PIN);
-    int16_t amplitude = sound_AMPB[i] - SILENCE;    
+    data[i] = analogRead(MIC_PIN);
+    int16_t amplitude = data[i] - SILENCE;    
     ampMax = max(ampMax, amplitude);
     ampMin = min(ampMin, amplitude);
     amplitude *= (float)graphH / (float)MAX_READ_VALUE;
