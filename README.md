@@ -19,10 +19,12 @@ The following hardware components are used in the system:
 
 The program requires the following libraries:
 
+- Arduino libraries
 - SPI
 - Wire
-- FFT algorithms
 - Adafruit SSD1306 OLED display library
+- Math
+- Complex
 
 ## Functionality
 
