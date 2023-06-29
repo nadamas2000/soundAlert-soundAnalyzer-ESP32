@@ -28,10 +28,10 @@ The program requires the following libraries:
 
 The program consists of the following sections:
 
-Hardware configuration: This section includes the configuration of the microcontroller board and microphone.
-Display initialization: The OLED display is initialized in this section.
-Sound analysis tools: The program performs fast Fourier transform (FFT) analysis on the captured sound data to identify specific frequencies and intensity thresholds.
-Main loop functionality: The system continuously captures sound, performs analysis, and triggers alerts when detections occur. The corresponding messages are displayed on the OLED screen.
+- Hardware configuration: This section includes the configuration of the microcontroller board and microphone.
+- Display initialization: The OLED display is initialized in this section.
+- Sound analysis tools: The program performs fast Fourier transform (FFT) analysis on the captured sound data to identify specific frequencies and intensity thresholds.
+- Main loop functionality: The system continuously captures sound, performs analysis, and triggers alerts when detections occur. The corresponding messages are displayed on the OLED screen.
 
 ## Note
 
