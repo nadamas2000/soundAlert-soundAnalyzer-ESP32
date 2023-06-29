@@ -6,28 +6,25 @@
 Description
 The Sound Analyzer Wifi Kit32 is a program that utilizes Arduino and various libraries to create a sound alert system. The main functionality of the code is to detect specific frequencies with certain intensities and display corresponding alerts on an OLED display.
 
-# Hardware
+## Hardware
 
 The following hardware components are used in the system:
 
-Microcontroller Board: Heltec Wifi Kit 32 V3
-Microphone: Max9814
-Battery Holder: AAA Battery Holder
-Case: 3D printed case
+- Microcontroller Board: Heltec Wifi Kit 32 V3
+- Microphone: Max9814
+- Battery Holder: AAA Battery Holder
+- Case: 3D printed case
 
-# Dependencies
+## Dependencies
 
 The program requires the following libraries:
 
-SPI
+- SPI
+- Wire
+- FFT algorithms
+- Adafruit SSD1306 OLED display library
 
-Wire
-
-FFT algorithms
-
-SSD1306 OLED display library
-
-# Functionality
+## Functionality
 
 The program consists of the following sections:
 
@@ -36,15 +33,15 @@ Display initialization: The OLED display is initialized in this section.
 Sound analysis tools: The program performs fast Fourier transform (FFT) analysis on the captured sound data to identify specific frequencies and intensity thresholds.
 Main loop functionality: The system continuously captures sound, performs analysis, and triggers alerts when detections occur. The corresponding messages are displayed on the OLED screen.
 
-# Note
+## Note
 
 The complete code includes additional files and libraries that are not shown in this documentation.
 
-# Author
+## Author
 
 Nahum Manuel Martín
 
-# References
+## References
 
 - Heltec Wifi Kit 32 V3 board: https://heltec.org/project/wifi-kit-32-v3/
 - Microphone Max9814: https://www.analog.com/media/en/technical-documentation/data-sheets/max9814.pdf
