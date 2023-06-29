@@ -22,6 +22,7 @@ The program requires the following libraries:
 - Arduino libraries
 - SPI
 - Wire
+- Driver RTC IO (ESP32)
 - Adafruit SSD1306 OLED display library
 - Math
 - Complex
