@@ -54,25 +54,21 @@ Nahum Manuel Martín
 --------------------------------------
 Connetion schema
 
-![Connection schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
-https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png
+![Connection schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)\
+[Connection schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
 
 --------------------------------------
 
-<img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>
-
+<img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>\
 [Video with sound analysis tool working demo (old release)](https://www.youtube.com/watch?v=icu3Co2jCHw)
 
 -------------------------------------
 
-[3D Printed Case in Thingiverse](https://www.thingiverse.com/thing:6096022)
-
-![3D Printed Case](https://cdn.thingiverse.com/assets/06/06/ce/4a/9f/featured_preview_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg)
-
+[3D Printed Case in Thingiverse](https://www.thingiverse.com/thing:6096022)\
+![3D Printed Case](https://cdn.thingiverse.com/assets/06/06/ce/4a/9f/featured_preview_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg)\
 [Video with sound analysis tool working in case](https://www.youtube.com/watch?v=QHgimJAhCMs)
 
 -------------------------------------
 
-AAA Rechargable Battery connections for 3.7V or 1.2V.
-
+AAA Rechargable Battery connections for 3.7V or 1.2V.\
 ![AAA Battery connections](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
