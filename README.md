@@ -52,7 +52,11 @@ Nahum Manuel Martín
 - Arduino Libraries: https://www.arduino.cc/reference/en/libraries/
 
 --------------------------------------
-<img src="https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png" alt="drawing" width="50%" height="50%"/>
+Connetion schema
+
+![Connection schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
+
+--------------------------------------
 
 <img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>
 
