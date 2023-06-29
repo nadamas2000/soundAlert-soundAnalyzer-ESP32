@@ -37,6 +37,7 @@ The program consists of the following sections:
 - Main loop functionality: The system continuously captures sound, performs analysis, and triggers alerts when detections occur. The corresponding messages are displayed on the OLED screen.
 
 ## Connetions schema
+- 22 AWG flexible cable
 <img src="https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png" alt="drawing" width="50%" height="50%"/>\
 [Connections schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
 
