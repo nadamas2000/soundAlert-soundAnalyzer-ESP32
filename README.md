@@ -55,6 +55,7 @@ Nahum Manuel Martín
 Connetion schema
 
 ![Connection schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
+https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png
 
 --------------------------------------
 
