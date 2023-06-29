@@ -20,8 +20,11 @@ Case: 3D printed case
 The program requires the following libraries:
 
 SPI
+
 Wire
+
 FFT algorithms
+
 SSD1306 OLED display library
 
 # Functionality
