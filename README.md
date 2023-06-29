@@ -50,6 +50,7 @@ AAA Rechargable Battery connections for 3.7V or 1.2V.
 <img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>\
 [Open case photo](https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg)
 
+[Video with sound detection and frequencies associated to bells or alarms](https://www.youtube.com/watch?v=QawYXSqPsZ8)\
 [Video with sound analysis tool working demo (old release)](https://www.youtube.com/watch?v=icu3Co2jCHw)
 
 ## 3D printed case
