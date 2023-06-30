@@ -10,7 +10,7 @@
  * Hardware:
  * - Microcontroller Board: Heltec Wifi Kit 32 V3
  * - Microphone: Max9814
- * - Battery Holder: AAA Battery Holder
+ * - Battery Holder: 3xAA Battery Holder
  * - Case: 3D printed case
  *
  * The program includes different sections for hardware configuration, display
