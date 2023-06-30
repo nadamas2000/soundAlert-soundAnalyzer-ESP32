@@ -12,7 +12,7 @@ The following hardware components are used in the system:
 
 - Microcontroller Board: Heltec Wifi Kit 32 V3
 - Microphone: Max9814
-- Battery Holder: AAA Battery Holder
+- Battery Holder: AA Battery Holder
 - Case: 3D printed case
 
 ## Dependencies
@@ -44,10 +44,10 @@ The program consists of the following sections:
 [Connections schema](https://cdn.thingiverse.com/assets/76/e9/e6/0c/3c/e8dd050e-24fb-42cf-af6b-cd4d3ed9ac02.png)
 
 ## Battery connecion
-AAA Rechargable Battery connections for 3.7V or 1.2V.
+Rechargable Battery connections for 3.7V or 1.2V.
 
-![AAA Battery connections](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
-[AAA Battery connections photo](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
+![AA Battery connections](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
+[AA Battery connections photo](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
 
 ## Working connected
 <img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>\
