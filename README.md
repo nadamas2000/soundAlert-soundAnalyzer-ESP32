@@ -50,17 +50,17 @@ Rechargable Battery connections for 3.7V or 1.2V.
 [AA Battery connections photo](https://cdn.thingiverse.com/assets/18/5c/7b/80/aa/c5b2b958-8ccc-4ef4-b754-989f01366405.png)
 
 ## Working connected
-<img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>\
-[Open case photo](https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg)
+
 
 [Video with sound detection and frequencies associated to bells or alarms](https://www.youtube.com/watch?v=QawYXSqPsZ8)\
 [Video with sound analysis tool working demo (old release)](https://www.youtube.com/watch?v=icu3Co2jCHw)
 
 ## 3D printed case
-[3D Printed Case in Thingiverse](https://www.thingiverse.com/thing:6096022)
+[3D Printed Case in Thingiverse.](https://www.thingiverse.com/thing:6096022) 3xAA Battery model and 1x18650 Battery model.
 
-![3D Printed Case](https://cdn.thingiverse.com/assets/06/06/ce/4a/9f/featured_preview_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg)\
-[Mounted case photo](https://cdn.thingiverse.com/assets/06/06/ce/4a/9f/featured_preview_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg)
+<img src="https://cdn.thingiverse.com/assets/ab/04/84/ee/ff/large_display_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg" alt="drawing" width="50%" height="50%"/>
+<img src="https://cdn.thingiverse.com/assets/96/c9/16/7f/d5/44437ce8-861f-498e-a02c-16e2b9ba65a3.jpg" alt="drawing" width="50%" height="50%"/>\
+<img src="https://cdn.thingiverse.com/assets/cf/9a/db/d3/e5/large_display_0e1526ad-7a28-4839-be75-506c2aca9819.png" alt="drawing" width="50%" height="50%"/>
 
 [Video with sound analysis tool working in case](https://www.youtube.com/watch?v=QHgimJAhCMs)
 
