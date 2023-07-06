@@ -53,7 +53,7 @@ Rechargable Battery connections for 3.7V or 1.2V.
 [Video with sound analysis tool working demo (old release)](https://www.youtube.com/watch?v=icu3Co2jCHw)
 
 ## 3D Printed Case
-[3D Printed Case in Thingiverse.](https://www.thingiverse.com/thing:6096022)\
+[3D Printed Case on Thingiverse.](https://www.thingiverse.com/thing:6096022)\
 3xAA Battery model and 1x18650 Battery model.
 
 <img src="https://cdn.thingiverse.com/assets/ab/04/84/ee/ff/large_display_50df27e4-ebd3-459a-aac1-78d2d78a0f4c.jpg" alt="drawing" width="50%" height="50%"/>
