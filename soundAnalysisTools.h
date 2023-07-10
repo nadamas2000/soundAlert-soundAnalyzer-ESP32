@@ -14,6 +14,7 @@
 #include "display.h"
 
 // Display libraries
+#include "soundInfo.h"
 #include "rawDisplays.h" // Analysis display modes
 #include "spectrumDisplays.h"
 #include "spectrogramDisplays.h"
@@ -24,7 +25,7 @@ using namespace commonSoundAnalysisTools;
 using namespace minMax;
 
 // Globals
-const unsigned char MAXMODES = 9;
+const unsigned char MAXMODES = 10;
 short currentMode = 0;
 bool changeMode = false;
 unsigned long displayTitle[MAXMODES];
@@ -137,30 +138,33 @@ void selectDisplayMode() {
   showTitle();
   switch (currentMode) {
     case 0: // Display spectrum 
-      displaySpectrum(changeMode, 0);
+      displaySoundInfo();
       break;
     case 1: // Display spectrum 
+      displaySpectrum(changeMode, 0);
+      break;
+    case 2: // Display spectrum 
       displaySpectrum(changeMode, 1);
       break;
-    case 2: // Display spectrum bars        
+    case 3: // Display spectrum bars        
       displaySpectrumBars(changeMode);
       break;
-    case 3: // Display Amplitude bars
+    case 4: // Display Amplitude bars
       displayAmplitudeBars(changeMode);
       break;
-    case 4: // Display Sweeping Envelope
+    case 5: // Display Sweeping Envelope
       displaySweepingEnvelope(changeMode);
       break;
-    case 5: // Display Running Envelope
+    case 6: // Display Running Envelope
       displayRunningEnvelope(changeMode);
       break;
-    case 6: // Display 1s Spectrogram
+    case 7: // Display 1s Spectrogram
       displaySpectrogram(changeMode);
       break;
-    case 7: // Display Sweeping Spectrogram
+    case 8: // Display Sweeping Spectrogram
       displaySweepingSpectrogram(changeMode);      
       break;
-    case 8: // Display Running Spectrogram
+    case 9: // Display Running Spectrogram
       displayRunningSpectrogram(changeMode);
       break;
     default:

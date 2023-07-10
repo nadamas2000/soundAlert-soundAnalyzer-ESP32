@@ -8,16 +8,13 @@
 * @date 2023/06/25
 */
 
+#pragma once
+
 #include "alerts.h"
-#include "fft.h"
 #include "board.h"
 #include "display.h"
-
-
-// -------------- Listening global variables and constants ------------------
-const int LISTEN_SAMPLES = 1024;
-float max_LISTEN = 0;
-int maxI_LISTEN = 0;
+#include "soundInfo.h"
+#include "pair.h"
 
 
 // ----------------- Main listening mode -----------------
@@ -34,7 +31,6 @@ int maxI_LISTEN = 0;
  * @param awakeDuration Reference to the duration of device awake time.
  */
 void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDuration);
-
 
 
 // ---------------- Printing images and info --------------------
@@ -55,32 +51,6 @@ void drawAlertImages(AlertElement &a);
 */
 void printAlert(bool debug);
 
-/**
-* @brief Displays the relevant information for the listening mode on the display.
-*/
-void showListeningInfo();
-
-
-// ---------------- Sound analyze ----------------------
-/**
-* @brief Reads the sound data from the microphone.
-* @param data The array to store the sound data.
-*/
-void getSound(float _Complex *data);
-
-/**
-* @brief Analyzes the sound data using Fast Fourier Transform (FFT).
-* @param data The sound data to analyze.
-*/
-void analyzeSound(float _Complex *data);
-
-/**
-* @brief Extracts the relevant information from the analyzed sound data.
-* @param data The analyzed sound data.
-*/
-void getRellevantInfo(float _Complex *data);
-
-
 // --------------- Check alerts ------------------------
 /**
  * @brief Checks if there is a match between the analyzed sound data and the defined alerts.
@@ -88,9 +58,11 @@ void getRellevantInfo(float _Complex *data);
  * This function checks if the maximum intensity and its corresponding index
  * match any of the defined alerts.
  *
- * @return true if an alert is matched, false otherwise.
+ * @param maxA The maximum intensity value.
+ * @param maxI The index of the maximum intensity value.
+ * @return True if an alert is matched, false otherwise.
  */
-bool alertMatching();
+bool alertMatching(const float maxA, const int maxI);
 
 
 // ---------------- Printing images and info --------------------
@@ -146,59 +118,14 @@ void printAlert(bool debug) {
   display.display();
 }
 
-void showListeningInfo() {
-  display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
-  display.setCursor(0, 0);
-  display.println("Mark: " + String(maxI_LISTEN));
-  display.setCursor(0, FONT_HEIGHT);
-  display.println("AHz: " + String(max_LISTEN));
-  display.setCursor(0, FONT_HEIGHT * 2);
-  display.println("Hz: " + String(maxI_LISTEN * 15.2256 * (1024.0 / LISTEN_SAMPLES)));
-  display.display();
-}
-
-
-// ---------------- Sound analyze ----------------------
-void getSound(float _Complex *data) {
-  static long chrono;
-  static const int LISTEN_MAX_FREQ = 16; // kHz
-  static const unsigned long sampling_period_us = round(1000ul * (1.0 / LISTEN_MAX_FREQ)); // 1/Hz = T(s) -> 1/kHz = T(ms)
-  
-  for (int i = 0; i < LISTEN_SAMPLES; i++) {
-    chrono = micros();
-    data[i] = analogRead(MIC_PIN);    
-    while (micros() - chrono < sampling_period_us); // only if analogRead time < sampling_period_us
-  }
-}
-
-void analyzeSound(float _Complex *data) {
-  static const int log2Sample = log(LISTEN_SAMPLES) / log(2);
-  
-  getSound(data);   
-  applyWindow (data, log2Sample, HAMMING, FFT_FORWARD);
-  performFFT(data, log2Sample, FFT_FORWARD);
-}
-
-void getRellevantInfo(float _Complex *data) {
-  max_LISTEN = 0;
-  maxI_LISTEN = 0;
-  for (int i = 1; i < LISTEN_SAMPLES; i++) {
-    if (creal(data[i]) > max_LISTEN) {
-      max_LISTEN = creal(data[i]);
-      maxI_LISTEN = i;    
-    }
-  }
-}
-
-
 // --------------- Check alerts ------------------------
-bool alertMatching() {
+bool alertMatching(const float maxA, const int maxI) {
   bool alertMatch = false;
   for (short i = 0; i < N_ALERT_TYPES; i++) {
-    if (maxI_LISTEN == alerts[i].iteratorMark and max_LISTEN > alerts[i].minIntensity){
+    if (maxI == alerts[i].iteratorMark and maxA > alerts[i].minIntensity){
       alertMatch = true;
       alerts[i].alertStatus = true; 
-      alerts[i].intensityMark = max_LISTEN;
+      alerts[i].intensityMark = maxA;
       for (int j = 0; j < N_ALERT_TYPES; j++) { // Clear other alert match
         if (j != i) alerts[j].alertStatus = false;
       }      
@@ -211,13 +138,11 @@ bool alertMatching() {
 // ----------------- Main listening mode -----------------
 void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDuration) {
   static bool alert = false;
-  static float _Complex data[LISTEN_SAMPLES];
   
-  if (!alert and mode != -1) printListeningLogo();
+  if (!alert and mode != -1) printListeningLogo();  
   
-  analyzeSound(data);
-  getRellevantInfo(data);
-  alert = alertMatching();
+  Pair<float, int> maxVal = analyzeSound();
+  alert = alertMatching(maxVal.first, maxVal.second);
   if (alert) {
     lastActivity = millis();
     awakeDuration = (2 * 60 * 1000); // 2 minutes showing alert
@@ -230,7 +155,7 @@ void listen(short mode, bool debug, unsigned long &lastActivity, int &awakeDurat
   }
 
   // info in listening mode.
-  if (debug and !alert) showListeningInfo();
+  if (debug and !alert) showListeningInfo(0, maxVal.first, maxVal.second);
   
 }
 
