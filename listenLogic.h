@@ -104,7 +104,7 @@ void printAlert(bool debug) {
         display.setCursor(0, FONT_HEIGHT);
         display.println("Hz: " + String(alerts[i].freq));
         display.setCursor(0, FONT_HEIGHT * 2);
-        display.println("Mark: " + String(alerts[i].iteratorMark));
+        display.println("Mark: " + String(alerts[i].iteratorRangeMin) + " >=< " + String(alerts[i].iteratorRangeMax));
         display.setCursor(0, FONT_HEIGHT * 3);
         display.println("Intensity: " + String(alerts[i].intensityMark));
       }
@@ -122,7 +122,7 @@ void printAlert(bool debug) {
 bool alertMatching(const float maxA, const int maxI) {
   bool alertMatch = false;
   for (short i = 0; i < N_ALERT_TYPES; i++) {
-    if (maxI == alerts[i].iteratorMark and maxA > alerts[i].minIntensity){
+    if (maxI >= alerts[i].iteratorRangeMin and maxI <= alerts[i].iteratorRangeMax and maxA > alerts[i].minIntensity){
       alertMatch = true;
       alerts[i].alertStatus = true; 
       alerts[i].intensityMark = maxA;

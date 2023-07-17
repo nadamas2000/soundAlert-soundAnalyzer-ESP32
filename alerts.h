@@ -21,7 +21,8 @@ struct AlertElement {
   // Fixed data
   unsigned short freq; /**< Frequency in Hz. Fixed information. */
   int minIntensity; /**< Minimum intensity. Fixed parameter. */
-  int iteratorMark; /**< Iterator mark. Fixed parameter. */
+  int iteratorRangeMin; /**< Minimum value of Iterator range. Fixed parameter. */
+  int iteratorRangeMax; /**< Maximum value of Iterator range. Fixed parameter. */
 
   // Additional information
   int intensityMark; /**< Intensity mark. */
@@ -53,7 +54,8 @@ void initAlerts();
 void initAlerts() {
   // Initialize alert 1
   alerts[0].alertStatus = false;
-  alerts[0].iteratorMark = 92;
+  alerts[0].iteratorRangeMin = 92;
+  alerts[0].iteratorRangeMax = 93;
   alerts[0].minIntensity = 40000;
   alerts[0].freq = 1400; // additional info, no compute
   alerts[0].image1_xPos = (DISPLAY_WIDTH / 3) - (arrow_left_img.getWidth() / 2);
@@ -65,7 +67,8 @@ void initAlerts() {
 
   // Initialize alert 2
   alerts[1].alertStatus = false;
-  alerts[1].iteratorMark = 85;
+  alerts[1].iteratorRangeMin = 85;
+  alerts[1].iteratorRangeMax = 86;
   alerts[1].minIntensity = 20000;
   alerts[1].freq = 1300; // additional info, no compute
   alerts[1].image1_xPos = (DISPLAY_WIDTH / 3) - (arrow_down_img.getWidth() / 2);
